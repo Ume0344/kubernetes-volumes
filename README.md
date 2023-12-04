@@ -52,3 +52,5 @@ kubectl get events --sort-by='.metadata.creationTimestamp'
 After volume is successfully mounted, if we add any data in pods condifgured directory, it will be persistent even if pod dies.
 
 ### How to mount a local directory to container
+
+*TODO: Learn how to do it*

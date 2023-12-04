@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      volumes: 
+      - name: mysql-local-directory-volume
+        hostPath:
+          path: /home/apmec/kubernetes-volumes
+      containers:
+        - name: sql-container
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+          - name: mysql-local-directory-volume
+            mountPath: /var/lib/mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef: 
+                  name: mysql-secret
+                  key: mysql-root-password
+
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef: 
+                  name: mysql-secret
+                  key: mysql-password
+
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef: 
+                  name: mysql-secret
+                  key: mysql-database
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef: 
+                  name: mysql-secret
+                  key: mysql-username
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  type: ClusterIP
+  ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+      
