@@ -7,14 +7,14 @@ Volumes can be created to persist data from any storage type (local storage, aws
 
 These are also used if we need to mount a local directory to container directory to store/retrieve config files or log files.
 
-Note: If we rae not using any robust and consistant storage solutions (aws s3), then we have to configure the storage to make it consistant and manage disaster recovery.
+Note: If we are not using any robust and consistant storage solutions (aws s3), then we have to configure the storage to make it consistant and manage disaster recovery.
 i.e, if we are using local storage, then we have to configure local storages on all the nodes, so that if pod dies on one node and created on another node the storage is accessible. 
 
 ### Persistant Volume
 A kubernetes resource. 
 
 ### Persistent Volume Claims
-An abstraction over persistent volumes. Whenever, PVC is created, it matches the requirement with available PV. If it does not find any PV according to requirements, it dynamically proviison the PV.
+An abstraction over persistent volumes. Whenever, PVC is created, it matches the requirement with available PV. If it does not find any PV according to requirements, it dynamically provision the PV.
 
 ### Manifest files for Volumes
 1- Create a pvc for application (databases) like in mysql-pvc.yaml
@@ -50,7 +50,7 @@ To get events by timestamp;
 kubectl get events --sort-by='.metadata.creationTimestamp'
 ```
 
-After volume is successfully mounted, if we add any data in pods condifgured directory, it will be persistent even if pod dies.
+After volume is successfully mounted, if we add any data in pods configured directory, it will be persistent even if pod dies.
 
 ### How to mount a local directory to container
 
@@ -69,7 +69,7 @@ spec:
     path: "/home/apmec/kubernetes-volumes"
 ```
 
-2- We create a pvc (pv and pvc should be of same storage capacity. Also, pvc is namespaced but pv are not);
+2- We create a pvc (pv and pvc should be of same storage capacity. Also, pvc is namespaced but pv is not);
 ```
 apiVersion: v1
 kind: PersistentVolume
