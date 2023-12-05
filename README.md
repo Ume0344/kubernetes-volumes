@@ -18,6 +18,7 @@ An abstraction over persistent volumes. Whenever, PVC is created, it matches the
 
 ### Manifest files for Volumes
 1- Create a pvc for application (databases) like in mysql-pvc.yaml
+
 2- Configure this pvc into spec of pod under volumes attribute, like this;
 ```
 spec:
@@ -41,7 +42,7 @@ spec:
             - containerPort: 3306
           volumeMounts:
           - name: mysql-persistent-storage
-            mountPath: /var/lib/mysql
+            mountPath: /var/lib/mysql # we have to check which directory in container particular db stores data, eg, for mongodb, its data/db.
 ```
 
 To get events by timestamp;
@@ -53,4 +54,34 @@ After volume is successfully mounted, if we add any data in pods condifgured dir
 
 ### How to mount a local directory to container
 
-*TODO: Learn how to do it*
+1- We create a pv and mention the directory path you want to mount in `hostPath`;
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/apmec/kubernetes-volumes"
+```
+
+2- We create a pvc (pv and pvc should be of same storage capacity. Also, pvc is namespaced but pv are not);
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/apmec/kubernetes-volumes"
+```
+
+3- Mount the pv using pvc to container directory in its spec. See `mongodb.yaml` for example.
